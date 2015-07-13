@@ -23,7 +23,7 @@ void ofApp::setup(){
     artk.setThreshold(threshold);
     
     ofSetLogLevel(OF_LOG_NOTICE);
-    
+
     checkForNewImages();
 }
 
@@ -53,8 +53,7 @@ void ofApp::checkForNewImages() {
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    //if(ofGetFrameNum() % CHECK_INTERVAL == 0) checkForNewImages();
-        
+    
     cam.update();
     if(cam.isFrameNew()) {
         colorImage.setFromPixels(cam.getPixels(), camW, camH);
@@ -79,55 +78,15 @@ void ofApp::draw(){
     int numMarkers = artk.getNumDetectedMarkers();
     
     ofSetColor(255);
-    grayImage.draw(0, 0, camW, camH);
+    grayImage.draw(0, 0, w, h);
     ofSetHexColor(0x666666);
     ofDrawBitmapString(ofToString(numMarkers) + " marker(s) found", 10, 20);
-    artk.draw(0, 0, camW, camH);
-
-    /* Fun stuff
-    if(numMarkers == 4) {
-        vector<cv::Point2f> centers;
-        vector<cv::Point2f> orderedCenters;
-        for(int i = 0; i < numMarkers; i++) {
-            ofPoint pt = artk.getDetectedMarkerCenter(i);
-            centers.push_back(cv::Point2f(pt.x,pt.y));
-        }
-        
-        orderedCenters.push_back(centers[0]);
-        orderedCenters.push_back(centers[1]);
-        orderedCenters.push_back(centers[3]);
-        orderedCenters.push_back(centers[2]);
-        
-        ofImage r; r.allocate(camW, camH, OF_IMAGE_COLOR);
-        ofxCv::unwarpPerspective(colorImage, r, orderedCenters);
-        resultImage.setFromPixels(r.getPixelsRef());
-        resultImage.draw(w/2 - compostW/2,h/2 - compostH/2,compostW, compostH);
-    //===========================================================
-    // NEW IMAGES
-    //===========================================================
-        if(images.size() > 0) {
-            ofPushMatrix();
-            ofTranslate(compostPos.x, compostPos.y);
-            for(int i = 0; i < images.size(); i++) {
-                ofVec2f pos = imagesPos[i];
-                images[i].draw(pos.x, pos.y);
-            }
-            ofPopMatrix();
-            
-            framesLeftToShowImages--;
-            if(framesLeftToShowImages <= 0) {
-                images.clear(); //might have to show images for longer before clearing
-                imagesPos.clear();
-            }
-        }
-    }
-    */
+    artk.draw(0, 0, w, h);
     
     //===========================================================
     // MARKERS
     //===========================================================
     ofSetColor(255);
-    ofSetRectMode(OF_RECTMODE_CENTER);
     ofFill();
     
     ofSetRectMode(OF_RECTMODE_CORNER);
